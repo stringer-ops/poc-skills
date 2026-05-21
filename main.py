@@ -3,7 +3,7 @@ import streamlit as st
 from dotenv import load_dotenv
 from langchain_core.messages import AIMessage, HumanMessage, SystemMessage
 from langchain.agents import create_agent
-from src.middleware import SkillMiddleware
+from src.middleware import InjectSkillsPromptMiddleware, ActiveSkillsMiddleware, DynamicSkillToolFilterMiddleware
 from src.skills import cargar_skill
 from src.tools import frase_cherokee, frase_inuktitut, frase_maori
 
@@ -44,7 +44,9 @@ def generate_agent():
         model="mistral-small-latest",
         tools=tools,
         middleware=[
-            SkillMiddleware()
+            InjectSkillsPromptMiddleware(),
+            ActiveSkillsMiddleware(),
+            DynamicSkillToolFilterMiddleware()
         ],
         debug=True
     )
