@@ -4,7 +4,8 @@ from dotenv import load_dotenv
 from langchain_core.messages import AIMessage, HumanMessage, SystemMessage
 from langchain.agents import create_agent
 from src.middleware import SkillMiddleware
-from src.tools import cargar_skill, frase_cherokee, frase_inuktitut, frase_maori
+from src.skills import cargar_skill
+from src.tools import frase_cherokee, frase_inuktitut, frase_maori
 
 load_dotenv()
 MISTRAL_API_KEY = os.getenv("MISTRAL_API_KEY")

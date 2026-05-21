@@ -1,8 +1,8 @@
 
 from langchain.messages import SystemMessage
-from tools import cargar_skill, SKILLS
 from langchain.agents.middleware import ModelRequest, ModelResponse, AgentMiddleware
 from typing import Callable
+from src.skills import SKILLS
 
 class SkillMiddleware(AgentMiddleware):
     """Middleware que inyecta las descripciones en el prompt del sistema"""
@@ -23,8 +23,8 @@ class SkillMiddleware(AgentMiddleware):
         handler: Callable[[ModelRequest], ModelResponse],
     ) -> ModelResponse:
         """ Inyecta descripciones de skills en el prompt del sistema."""
+        
         # Build the skills addendum
-
         skills_addendum = (
             f"\n\n## Habilidades disponibles\n\n{self.skills_prompt}\n\n"
             "Usa la tool cargar_skill cuando necesites información detallada "
@@ -38,5 +38,3 @@ class SkillMiddleware(AgentMiddleware):
         new_system_message = SystemMessage(content=new_content)
         modified_request = request.override(system_message=new_system_message)
         return handler(modified_request)
-
-
