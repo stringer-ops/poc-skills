@@ -5,7 +5,7 @@ from langchain_core.messages import AIMessage, HumanMessage, SystemMessage
 from langchain.agents import create_agent
 from src.middleware import InjectSkillsPromptMiddleware, ActiveSkillsMiddleware, DynamicSkillToolFilterMiddleware
 from src.skills import cargar_skill
-from src.tools import frase_cherokee, frase_inuktitut, frase_maori
+from src.tools import cherokee_phrase, inuktitut_phrase, maori_phrase
 
 load_dotenv()
 MISTRAL_API_KEY = os.getenv("MISTRAL_API_KEY")
@@ -44,7 +44,7 @@ SYSTEM_PROMPT = """
 def generate_agent():
 
     tools = [
-        cargar_skill, frase_cherokee, frase_inuktitut, frase_maori
+        cargar_skill, cherokee_phrase, inuktitut_phrase, maori_phrase
     ]
     
     agent = create_agent(
@@ -69,7 +69,7 @@ def main():
     if "messages" not in st.session_state:
         st.session_state.messages = []
 
-    user_prompt = st.chat_input("Escribe tu mensaje...")
+    user_prompt = st.chat_input("Write a message...")
     if user_prompt:
         st.session_state.messages.append(HumanMessage(content=user_prompt))
 

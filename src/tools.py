@@ -1,31 +1,31 @@
 from langchain_core.tools import tool
 
 @tool
-def frase_cherokee() -> dict:
-    """Devuelve una frase aleatoria en cherokee"""
+def cherokee_phrase() -> dict:
+    """Returns a random phrase in Cherokee"""
     
     return {
-        "frase": "ᎣᏍᏓ ᏑᎾᎴᎢ",
-        "traducción": "Buenos días",
-        "pronunciación": "Osda sunalei"
+        "phrase": "ᎣᏍᏓ ᏑᎾᎴᎢ",
+        "translation": "Good morning",
+        "pronunciation": "Osda sunalei"
     }
 
 @tool
-def frase_inuktitut() -> dict:
-    """Devuelve una frase aleatoria en inuit"""
+def inuktitut_phrase() -> dict:
+    """Returns a random phrase in Inuktitut"""
     
     return {
-        "frase": "ᐅᓪᓛᓴᒃᑯᑦ",
-        "traducción": "Buenos días",
-        "pronunciación": "Ublaahatkut"
+        "phrase": "ᐅᓪᓛᓴᒃᑯᑦ",
+        "translation": "Good morning",
+        "pronunciation": "Ublaahatkut"
     }  
 
 @tool
-def frase_maori() -> dict:
-    """Devuelve una frase aleatoria en maorí"""
+def maori_phrase() -> dict:
+    """Returns a random phrase in Maori"""
     
     return {
-        "frase": "Ata mārie",
-        "traducción": "Buenos días",
-        "pronunciación": "Ata marie"
+        "phrase": "Ata mārie",
+        "translation": "Good morning",
+        "pronunciation": "Ata marie"
     }

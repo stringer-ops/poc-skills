@@ -4,11 +4,13 @@ from langchain.agents.middleware import ModelRequest, ModelResponse, AgentMiddle
 from typing import Callable
 from src.skills import SKILLS, cargar_skill
 
+visible_tools = [cargar_skill]
+
 class InjectSkillsPromptMiddleware(AgentMiddleware):
-    """Middleware que inyecta las descripciones en el prompt del sistema"""
+    """Middleware that injects skill descriptions into the system prompt"""
 
     def __init__(self):
-        """Inicializa y crea el prompt de SKILLS."""
+        """Initializes and creates the SKILLS prompt."""
         # Build skills prompt from the SKILLS list
         skills_list = []
         for skill in SKILLS:
@@ -22,13 +24,13 @@ class InjectSkillsPromptMiddleware(AgentMiddleware):
         request: ModelRequest,
         handler: Callable[[ModelRequest], ModelResponse],
     ) -> ModelResponse:
-        """ Inyecta descripciones de skills en el prompt del sistema."""
+        """Injects skill descriptions into the system prompt."""
 
         # Build the skills addendum
         skills_addendum = (
-            f"\n\n## Habilidades disponibles\n\n{self.skills_prompt}\n\n"
-            "Usa la tool cargar_skill cuando necesites información detallada "
-            "sobre cómo manejar un tipo específico de solicitud."
+            f"\n\n## Available Skills\n\n{self.skills_prompt}\n\n"
+            "Use the load_skill tool when you need detailed information "
+            "about how to handle a specific type of request."
         )
 
         # Append to system message content blocks
@@ -40,14 +42,14 @@ class InjectSkillsPromptMiddleware(AgentMiddleware):
         return handler(modified_request)
 
 class ActiveSkillsMiddleware(AgentMiddleware):
-    """Middleware que registra en el estado del agente las skills que han sido cargadas en el context"""
+    """Middleware that tracks in the agent state which skills have been loaded into the context"""
     
     def wrap_model_call(
         self,
         request: ModelRequest,
         handler: Callable[[ModelRequest], ModelResponse],
     ) -> ModelResponse:
-        """Permite cargar dinámicamente tools asociadas a una skill"""
+        """Allows dynamically loading tools associated with a skill"""
 
         messages = request.state["messages"]
 
@@ -57,7 +59,7 @@ class ActiveSkillsMiddleware(AgentMiddleware):
                 continue
             
             for skill in SKILLS:
-                if f"Skill cargada: '{skill["name"]}'" in message.content:
+                if f"Skill loaded: \'{skill['name']}\'" in message.content:
                     active_skills.add(skill["name"])
 
         request.state["active_skills"] = active_skills
@@ -65,25 +67,22 @@ class ActiveSkillsMiddleware(AgentMiddleware):
         return handler(request)
 
 class DynamicSkillToolFilterMiddleware(AgentMiddleware):
-    """Middleware que permite cargar dinámicamente tools asociadas a una skill cuando
-    esta es cargada en el contexto"""
+    """Middleware that dynamically loads tools associated with a skill when it is loaded into the context"""
 
     def wrap_model_call(
         self,
         request: ModelRequest,
         handler: Callable[[ModelRequest], ModelResponse],
     ) -> ModelResponse:
-        """Permite cargar dinámicamente tools asociadas a una skill."""
+        """Allows dynamically loading tools associated with a skill."""
 
         state = request.state
         active_skills = state.get("active_skills", set())
         
-        visible_tools = [cargar_skill]
-        if active_skills:
-            for active_skill in active_skills:
-                for skill in SKILLS:
-                    if skill["name"] == active_skill:
-                        request = request.override(tools=[*visible_tools, *skill["tools"]])
+        for active_skill in active_skills:
+            for skill in SKILLS:
+                if skill["name"] == active_skill:
+                    request = request.override(tools=[*visible_tools, *skill["tools"]])
         else:
             request = request.override(tools=visible_tools)
         
