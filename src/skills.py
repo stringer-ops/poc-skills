@@ -40,7 +40,7 @@ SKILLS: list[Skill] = [
 ]
 
 @tool
-def cargar_skill(skill_name: str) -> str:
+def load_skill(skill_name: str) -> str:
     """Loads a specific skill into the prompt.
 
     Returns the skill name and all prompt information associated with it to properly handle its use cases.

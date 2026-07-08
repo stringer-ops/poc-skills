@@ -2,9 +2,9 @@
 from langchain.messages import SystemMessage, ToolMessage
 from langchain.agents.middleware import ModelRequest, ModelResponse, AgentMiddleware
 from typing import Callable
-from src.skills import SKILLS, cargar_skill
+from src.skills import SKILLS, load_skill
 
-visible_tools = [cargar_skill]
+visible_tools = [load_skill]
 
 class InjectSkillsPromptMiddleware(AgentMiddleware):
     """Middleware that injects skill descriptions into the system prompt"""

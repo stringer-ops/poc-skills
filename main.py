@@ -4,7 +4,7 @@ from dotenv import load_dotenv
 from langchain_core.messages import AIMessage, HumanMessage, SystemMessage
 from langchain.agents import create_agent
 from src.middleware import InjectSkillsPromptMiddleware, ActiveSkillsMiddleware, DynamicSkillToolFilterMiddleware
-from src.skills import cargar_skill
+from src.skills import load_skill
 from src.tools import cherokee_phrase, inuktitut_phrase, maori_phrase
 
 load_dotenv()
@@ -44,7 +44,7 @@ SYSTEM_PROMPT = """
 def generate_agent():
 
     tools = [
-        cargar_skill, cherokee_phrase, inuktitut_phrase, maori_phrase
+        load_skill, cherokee_phrase, inuktitut_phrase, maori_phrase
     ]
     
     agent = create_agent(
